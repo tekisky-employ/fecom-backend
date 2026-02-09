@@ -42,17 +42,28 @@ export const createUser = async (req, res) => {
     await newUser.save();
 
     // create
-    // const accesstoken = createAccessToken({ id: newUser._id });
-    // const refreshtoken = createRefreshToken({ id: newUser._id });
     const accesstoken = createAccessToken(newUser._id);
     const refreshtoken = createRefreshToken(newUser._id);
 
     res.cookie("refreshtoken", refreshtoken, {
       httpOnly: true,
       path: "/user/refreshtoken",
+      // secure: true, // ✅ Render + Vercel ke liye
+      // sameSite: "none", // ✅ cross-site cookie
       sameSite: "lax",
       secure: false,
     });
+
+    // res.cookie("refreshtoken", refreshtoken, {
+    //   httpOnly: true,
+    //   path: "/user/refreshtoken",
+    //   // sameSite: "lax",
+    //   // secure: false,
+    //   // secure: process.env.NODE_ENV === "production",
+    //   // sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    //   secure: true,
+    //   sameSite: "none",
+    // });
     return res.json({ accesstoken });
   } catch (error) {
     return res.status(500).json({
@@ -123,8 +134,12 @@ export const login = async (req, res) => {
     res.cookie("refreshtoken", refreshtoken, {
       httpOnly: true,
       path: "/user/refreshtoken",
+      // secure: true,
+      // sameSite: "none",
       sameSite: "lax",
       secure: false,
+      // secure: process.env.NODE_ENV === "production",
+      // sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     });
     res.json({
       accesstoken,
@@ -140,7 +155,12 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    res.clearCookie("refreshtoken", { path: "/user/refreshtoken" });
+    res.clearCookie("refreshtoken", {
+      httpOnly: true,
+      path: "/user/refreshtoken",
+      // secure: true,
+      // sameSite: "none",
+    });
     return res.json({ msg: "Log Out" });
   } catch (error) {
     return res.status(500).json({ msg: error.message });
@@ -234,36 +254,6 @@ export const forgotPassword = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
-
-// export const forgotPassword = async (req, res) => {
-//   try {
-//     const { email } = req.body;
-
-//     const user = await userModel.findOne({ email });
-//     if (!user) return res.status(400).json({ msg: "User not found" });
-
-//     // generate token
-//     const resetToken = crypto.randomBytes(32).toString("hex");
-
-//     user.resetPasswordToken = crypto
-//       .createHash("sha256")
-//       .update(resetToken)
-//       .digest("hex");
-
-//     user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 min
-
-//     await user.save();
-
-//     const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
-
-//     // 👉 yahan nodemailer se email bhejna (abhi console)
-//     console.log("RESET LINK 👉", resetUrl);
-
-//     res.json({ msg: "Password reset link sent to email" });
-//   } catch (err) {
-//     res.status(500).json({ msg: err.message });
-//   }
-// };
 
 export const resetPassword = async (req, res) => {
   try {

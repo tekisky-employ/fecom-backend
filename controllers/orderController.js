@@ -29,15 +29,7 @@ export const createOrder = async (req, res) => {
     return res.status(500).json({ msg: err.message });
   }
 };
-// USER ALL ORDERS
-// export const getUserOrders = async (req, res) => {
-//   try {
-//     const orders = await orderModel.find({ user_id: req.user.id });
-//     res.json(orders);
-//   } catch (err) {
-//     return res.status(500).json({ msg: err.message });
-//   }
-// };
+
 export const getUserOrders = async (req, res) => {
   try {
     const orders = await orderModel

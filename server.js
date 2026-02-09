@@ -15,13 +15,13 @@ import adminRouter from "./routers/adminRouter.js";
 const app = express();
 const port = process.env.PORT || 5000;
 
-//middleware
 app.use(
   cors({
-    origin: "*", // Vite frontend
+    origin: "https://fsstecom.netlify.app/", // 🔥 sabse important
     credentials: true,
   }),
 );
+
 app.use(express.json());
 app.use(
   fileUpload({
