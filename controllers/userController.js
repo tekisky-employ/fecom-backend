@@ -48,10 +48,10 @@ export const createUser = async (req, res) => {
     res.cookie("refreshtoken", refreshtoken, {
       httpOnly: true,
       path: "/user/refreshtoken",
-      // secure: true, // ✅ Render + Vercel ke liye
-      // sameSite: "none", // ✅ cross-site cookie
-      sameSite: "lax",
-      secure: false,
+      secure: true, // ✅ Render + Vercel ke liye
+      sameSite: "none", // ✅ cross-site cookie
+      // sameSite: "lax",
+      // secure: false,
     });
 
     // res.cookie("refreshtoken", refreshtoken, {
@@ -134,10 +134,10 @@ export const login = async (req, res) => {
     res.cookie("refreshtoken", refreshtoken, {
       httpOnly: true,
       path: "/user/refreshtoken",
-      // secure: true,
-      // sameSite: "none",
-      sameSite: "lax",
-      secure: false,
+      secure: true,
+      sameSite: "none",
+      // sameSite: "lax",
+      // secure: false,
       // secure: process.env.NODE_ENV === "production",
       // sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     });
@@ -158,8 +158,8 @@ export const logout = async (req, res) => {
     res.clearCookie("refreshtoken", {
       httpOnly: true,
       path: "/user/refreshtoken",
-      // secure: true,
-      // sameSite: "none",
+      secure: true,
+      sameSite: "none",
     });
     return res.json({ msg: "Log Out" });
   } catch (error) {
