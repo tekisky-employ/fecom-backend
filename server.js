@@ -15,12 +15,20 @@ import adminRouter from "./routers/adminRouter.js";
 const app = express();
 const port = process.env.PORT || 5000;
 
+// app.use(
+//   cors({
+//     origin: "https://fsstecom.netlify.app/", // 🔥 sabse important
+//     credentials: true,
+//   }),
+// );
 app.use(
   cors({
-    origin: "https://fsstecom.netlify.app/", // 🔥 sabse important
+    origin: ["http://localhost:5173", "https://fsstecom.netlify.app"],
     credentials: true,
   }),
 );
+
+app.options("*", cors());
 
 app.use(express.json());
 app.use(
